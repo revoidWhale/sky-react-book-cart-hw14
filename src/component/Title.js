@@ -1,31 +1,26 @@
-import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { inputText } from '../redux/actions'
 
 function Title(props) {
-  console.log(props)
+  const text = useSelector((state) => {
+    const { inputReducer } = state
+
+    return inputReducer.text
+  })
+  const dispatch = useDispatch()
+
+  const handleChange = (e) => {
+    dispatch(inputText(e.target.value))
+  }
+
   return (
     <div className="card-title">
       <div className="card-title-top">
-        <input type="text" onChange={props.onChangeUserValue} />
+        <input type="text" onChange={handleChange} />
       </div>
-      <p>{props.userValue}</p>
+      <p>{text}</p>
     </div>
   )
 }
 
-function mapStateToProps(state) {
-  console.log('mapStateToProps', state)
-  return {
-    userValue: state.titleReducer.userValue,
-  }
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    onChangeUserValue: (event) => {
-      const action = { type: 'ONCHANGE', value: event.target.value }
-      dispatch(action)
-    },
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Title)
+export default Title
